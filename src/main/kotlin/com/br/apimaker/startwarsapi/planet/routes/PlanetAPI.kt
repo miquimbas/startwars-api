@@ -4,6 +4,7 @@ import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTO
 import com.br.apimaker.startwarsapi.planet.services.PlanetService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -15,6 +16,9 @@ class PlanetAPI @Autowired constructor(
 ) {
     @GetMapping("/")
     fun findAll(): List<PlanetDTO>? = planetService.list()
+
+    @GetMapping("/{id}")
+    fun findById(@PathVariable id: String) = planetService.findById(id)
 
     @PostMapping("/populate-database")
     fun populateDatabase() = planetService.populatePlanetsDatabase()

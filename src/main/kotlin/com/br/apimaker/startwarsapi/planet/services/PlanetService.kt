@@ -18,8 +18,15 @@ class PlanetService @Autowired constructor(
     private lateinit var planetRepository: PlanetRepository
 
     fun list() = planetRepository.findAll().map {
-        PlanetDTO(name = it.name, climate = it.climate, terrain = it.terrain)
+        PlanetDTO(
+            it.id,
+            it.name,
+            it.climate,
+            it.terrain,
+        )
     }
+
+    fun findById(id: String) = planetRepository.findById(id)
 
     fun populatePlanetsDatabase() {
         planetRepository.deleteAll()
