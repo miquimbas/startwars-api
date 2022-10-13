@@ -5,6 +5,7 @@ import com.br.apimaker.startwarsapi.planet.database.PlanetRepository
 import com.br.apimaker.startwarsapi.film.database.FilmModel
 import com.br.apimaker.startwarsapi.film.restproviders.FilmProvider
 import com.br.apimaker.startwarsapi.http.request.RetrofitBuilder
+import com.br.apimaker.startwarsapi.planet.restprovider.LoadPlanetDTO
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTO
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetProvider
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,24 +29,28 @@ class PlanetService @Autowired constructor(
 
     fun findById(id: String) = planetRepository.findById(id)
 
-    fun populatePlanetsDatabase() {
-        planetRepository.deleteAll()
-        builder.build<PlanetProvider>(RetrofitBuilder.BASE_URL)
-            .getPlanets()
+    fun load(id: Int): PlanetDTO? {
+        return builder.build<PlanetProvider>(RetrofitBuilder.BASE_URL)
+            .searchPlanetById(id)
             .execute()
             .body()
-            ?.results
-            ?.forEach { planetDTO ->
-                println("Saving planet model ${planetDTO.name}")
-                planetRepository.save(
-                    PlanetModel(
-                    name = planetDTO.name,
-                    climate = planetDTO.climate,
-                    terrain = planetDTO.terrain,
-                    films = searchFilmes(planetDTO.films))
-                )
-            }
-        println("End of populating database")
+            .takeIf { it != null }
+            ?.let(::savePlanet)
+    }
+
+    private fun savePlanet(planetDTO: PlanetDTO): PlanetDTO {
+        val planetModel = planetRepository.save(
+            PlanetModel(
+                name = planetDTO.name,
+                climate = planetDTO.climate,
+                terrain = planetDTO.terrain,
+                films = searchFilmes(planetDTO.films)
+            )
+        )
+
+        return planetDTO.apply {
+            this.id = planetModel.id
+        }
     }
 
     private fun searchFilmes(films: List<String>?): List<FilmModel>? {
@@ -55,7 +60,12 @@ class PlanetService @Autowired constructor(
                 .execute()
                 .body()
 
+            //arrumar nome da variavel
             FilmModel(dto?.title, dto?.release_date, dto?.director)
         }
+    }
+
+    fun removeById(id: String) {
+        planetRepository.deleteById(id)
     }
 }
