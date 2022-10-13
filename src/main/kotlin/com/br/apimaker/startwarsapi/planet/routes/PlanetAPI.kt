@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 // add nas docs como rodar o projeto
 // detalhar url para requisição e config do /api
 // ajustar status de erro do {id}/load quando não criamos um registro
+//arrumar nome da variavel release_date
 @RestController
 @RequestMapping("/planet")
 class PlanetAPI @Autowired constructor(
