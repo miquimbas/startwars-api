@@ -1,56 +1,47 @@
 package com.br.apimaker.startwarsapi.planet.services
 
-import com.br.apimaker.startwarsapi.planet.database.PlanetModel
 import com.br.apimaker.startwarsapi.planet.database.PlanetRepository
 import com.br.apimaker.startwarsapi.film.database.FilmModel
 import com.br.apimaker.startwarsapi.film.restproviders.FilmProvider
 import com.br.apimaker.startwarsapi.http.request.RetrofitBuilder
-import com.br.apimaker.startwarsapi.planet.restprovider.LoadPlanetDTO
-import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTO
+import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTOInput
+import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTOOutput
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class PlanetService @Autowired constructor(
-    private val builder: RetrofitBuilder
+    private val builder: RetrofitBuilder,
+    private val planetMapper: PlanetMapper
 ){
     @Autowired
     private lateinit var planetRepository: PlanetRepository
 
-    fun list() = planetRepository.findAll().map {
-        PlanetDTO(
-            it.id,
-            it.name,
-            it.climate,
-            it.terrain,
-        )
-    }
+    fun list() = planetRepository.findAll().map { planetMapper.convertToOutputDTO(it) }
 
-    fun findById(id: String) = planetRepository.findById(id)
+//    Alterar retorno para dto
+    fun findById(id: String) = planetMapper.convertToOutputDTO(planetRepository.findById(id).orElse(null))
 
-    fun load(id: Int): PlanetDTO? {
+    fun load(id: Int): PlanetDTOOutput? {
         return builder.build<PlanetProvider>(RetrofitBuilder.BASE_URL)
             .searchPlanetById(id)
             .execute()
             .body()
             .takeIf { it != null }
-            ?.let(::savePlanet)
+            ?.let { planetDtoInput ->
+                planetRepository.findByName(planetDtoInput.name).takeIf { it != null }
+                    ?.let { planetMapper.convertToOutputDTO(it) }
+                    ?: savePlanet(planetDtoInput)
+            }
     }
 
-    private fun savePlanet(planetDTO: PlanetDTO): PlanetDTO {
+    private fun savePlanet(planetDTOInput: PlanetDTOInput): PlanetDTOOutput {
         val planetModel = planetRepository.save(
-            PlanetModel(
-                name = planetDTO.name,
-                climate = planetDTO.climate,
-                terrain = planetDTO.terrain,
-                films = searchFilmes(planetDTO.films)
-            )
+            planetMapper.convertToModel(planetDTOInput, searchFilmes(planetDTOInput.films))
         )
 
-        return planetDTO.apply {
-            this.id = planetModel.id
-        }
+        return planetMapper.convertToOutputDTO(planetModel)
     }
 
     private fun searchFilmes(films: List<String>?): List<FilmModel>? {
@@ -68,4 +59,9 @@ class PlanetService @Autowired constructor(
     fun removeById(id: String) {
         planetRepository.deleteById(id)
     }
+
+    fun findByName(name: String) =
+        planetRepository.findByName(name)
+            .let { planetMapper.convertToOutputDTO(it) }
+
 }

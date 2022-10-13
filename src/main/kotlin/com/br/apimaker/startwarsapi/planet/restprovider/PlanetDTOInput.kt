@@ -1,6 +1,6 @@
 package com.br.apimaker.startwarsapi.planet.restprovider
 
-data class PlanetDTO constructor(
+data class PlanetDTOInput constructor(
     var id: String? = null,
     val name: String,
     val climate: String,

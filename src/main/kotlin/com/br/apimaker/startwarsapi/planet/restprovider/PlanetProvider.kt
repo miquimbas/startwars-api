@@ -7,8 +7,8 @@ import retrofit2.http.Path
 
 interface PlanetProvider {
     @GET("planets")
-    fun getPlanets(): Call<SwapiResponse<PlanetDTO>>
+    fun getPlanets(): Call<SwapiResponse<PlanetDTOInput>>
 
     @GET("planets/{id}")
-    fun searchPlanetById(@Path("id") id: Int): Call<PlanetDTO>
+    fun searchPlanetById(@Path("id") id: Int): Call<PlanetDTOInput>
 }

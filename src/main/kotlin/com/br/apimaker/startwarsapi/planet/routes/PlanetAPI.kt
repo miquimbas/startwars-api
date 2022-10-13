@@ -1,6 +1,6 @@
 package com.br.apimaker.startwarsapi.planet.routes
 
-import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTO
+import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTOOutput
 import com.br.apimaker.startwarsapi.planet.services.PlanetService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -12,25 +12,29 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+// add logs
+//criar testes
 // criar doc de testes
 // ensinar como ver cobertura de testes
 // descrever na documentação o pq das minhas decisões
-// ajustar carregamento da app para load
 // ajustar retorno de status de erro
 //tratar ids invalidos
 // add nas docs como rodar o projeto
 // detalhar url para requisição e config do /api
-//add validação se existe o registro no banco para salvar
+// ajustar status de erro do {id}/load quando não criamos um registro
 @RestController
 @RequestMapping("/planet")
 class PlanetAPI @Autowired constructor(
     private val planetService: PlanetService
 ) {
     @GetMapping("/")
-    fun findAll(): List<PlanetDTO>? = planetService.list()
+    fun findAll(): List<PlanetDTOOutput>? = planetService.list()
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: String) = planetService.findById(id)
+
+    @GetMapping("/name/{name}")
+    fun findByName(@PathVariable name: String) = planetService.findByName(name)
 
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: String): ResponseEntity<String> {
@@ -43,6 +47,6 @@ class PlanetAPI @Autowired constructor(
         planetService.load(id)
             .takeIf { it != null }
             ?.let {
-                ResponseEntity<PlanetDTO>(it, HttpStatus.CREATED)
-            } ?: ResponseEntity<PlanetDTO>(null, HttpStatus.NOT_FOUND)
+                ResponseEntity<PlanetDTOOutput>(it, HttpStatus.CREATED)
+            } ?: ResponseEntity<PlanetDTOOutput>(null, HttpStatus.NOT_FOUND)
 }
