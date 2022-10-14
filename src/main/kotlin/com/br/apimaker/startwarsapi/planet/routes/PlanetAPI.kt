@@ -3,7 +3,6 @@ package com.br.apimaker.startwarsapi.planet.routes
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTOOutput
 import com.br.apimaker.startwarsapi.planet.services.PlanetService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-// add logs
 //criar testes
 // criar doc de testes
 // ensinar como ver cobertura de testes
@@ -21,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController
 //tratar ids invalidos
 // add nas docs como rodar o projeto
 // detalhar url para requisição e config do /api
-// ajustar status de erro do {id}/load quando não criamos um registro
 //arrumar nome da variavel release_date
 @RestController
 @RequestMapping("/planet")
 class PlanetAPI @Autowired constructor(
-    private val planetService: PlanetService
+    private val planetService: PlanetService,
+    private val responseBuilder: ResponseBuilder
 ) {
     @GetMapping("/")
     fun findAll(): List<PlanetDTOOutput>? = planetService.list()
@@ -44,10 +42,8 @@ class PlanetAPI @Autowired constructor(
     }
 
     @PostMapping("/{id}/load")
-    fun load(@PathVariable id: Int) =
-        planetService.load(id)
-            .takeIf { it != null }
-            ?.let {
-                ResponseEntity<PlanetDTOOutput>(it, HttpStatus.CREATED)
-            } ?: ResponseEntity<PlanetDTOOutput>(null, HttpStatus.NOT_FOUND)
+    fun load(@PathVariable id: Int): ResponseEntity<PlanetDTOOutput> {
+        val response = planetService.load(id)
+        return responseBuilder.build(response)
+    }
 }

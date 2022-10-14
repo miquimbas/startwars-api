@@ -5,5 +5,5 @@ import org.springframework.lang.Nullable
 
 interface PlanetRepository: MongoRepository<PlanetModel, String> {
     @Nullable
-    fun findByName(name: String): PlanetModel
+    fun findByName(name: String): PlanetModel?
 }
