@@ -13,6 +13,9 @@ class ResponseBuilder {
         if (loadPlanetDTO.created)
             return ResponseEntity<List<PlanetDTOOutput>>(loadPlanetDTO.output, HttpStatus.CREATED)
 
+        if(loadPlanetDTO.deleted)
+            return ResponseEntity<List<PlanetDTOOutput>>(loadPlanetDTO.output, HttpStatus.NO_CONTENT)
+
         if (loadPlanetDTO.output.isEmpty())
             return ResponseEntity<List<PlanetDTOOutput>>(null, HttpStatus.NOT_FOUND)
 

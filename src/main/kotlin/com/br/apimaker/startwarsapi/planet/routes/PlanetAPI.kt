@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-//arrumar nome da variavel release_date
+// ajustar retorno do delete
 // criar doc de testes
 // ensinar como ver cobertura de testes
 // descrever na documentação o pq das minhas decisões
@@ -34,14 +34,8 @@ class PlanetAPI @Autowired constructor(
     fun findByName(@PathVariable name: String) = responseBuilder.build(planetService.findByName(name))
 
     @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id: String): ResponseEntity<String> {
-        planetService.removeById(id)
-        return ResponseEntity.noContent().build()
-    }
+    fun deleteById(@PathVariable id: String) = responseBuilder.build(planetService.deleteById(id))
 
-    @PostMapping("/{id}/load")
-    fun load(@PathVariable id: Int): ResponseEntity<List<PlanetDTOOutput>> {
-        val response = planetService.load(id)
-        return responseBuilder.build(response)
-    }
+        @PostMapping("/{id}/load")
+    fun load(@PathVariable id: Int) = responseBuilder.build(planetService.loadFromIntegrationById(id))
 }

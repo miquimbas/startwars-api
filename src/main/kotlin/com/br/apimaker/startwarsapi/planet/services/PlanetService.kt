@@ -24,7 +24,7 @@ class PlanetService @Autowired constructor(
 
     fun findById(id: String) = buildPlanetResponse(planetRepository.findById(id).orElse(null))
 
-    fun load(id: Int): PlanetResponse {
+    fun loadFromIntegrationById(id: Int): PlanetResponse {
         runCatching {
             return doRequestPlanet(id)
                 .takeIf { it != null }
@@ -37,15 +37,22 @@ class PlanetService @Autowired constructor(
         return newInstance().withDTOOutput(listOf()).build()
     }
 
-    fun removeById(id: String) {
+    fun deleteById(id: String): PlanetResponse {
         runCatching {
             logManager.info("Deleting planet of id $id")
-            planetRepository.deleteById(id)
-            logManager.info("Planet of id $id deleted with success")
+            planetRepository.findById(id).orElse(null)
+                .takeIf { it != null}
+                ?.let {
+                    planetRepository.deleteById(id)
+                    logManager.info("Planet of id $id deleted with success")
+                    return newInstance().withDeleted(true).build()
+                } ?: newInstance().build()
+
         }.onFailure {
             logManager.error(it.stackTraceToString())
             throw it
         }
+        return newInstance().build()
     }
 
     fun findByName(name: String) =

@@ -2,8 +2,9 @@ package com.br.apimaker.startwarsapi.planet.restprovider
 
 class PlanetResponseBuilder {
 
-    private lateinit var output: List<PlanetDTOOutput?>
+    private var output = listOf<PlanetDTOOutput?>()
     private var created = false
+    private var deleted = false
 
     companion object {
         fun newInstance() = PlanetResponseBuilder()
@@ -19,9 +20,15 @@ class PlanetResponseBuilder {
         return this
     }
 
+    fun withDeleted(deleted: Boolean): PlanetResponseBuilder {
+        this.deleted = deleted
+        return this
+    }
+
     fun build() =
         PlanetResponse(
             output = this.output.mapNotNull { it },
-            created = this.created
+            created = this.created,
+            deleted = this.deleted
         )
 }
