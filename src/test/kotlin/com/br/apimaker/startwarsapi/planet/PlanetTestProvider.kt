@@ -13,7 +13,7 @@ class PlanetTestProvider {
         const val DTO_INPUT_URL_FILM_1 = "url1"
         const val DTO_INPUT_URL_FILM_2 = "url2"
 
-        fun createFilmDTO() = FilmDTO(title = "film", director = "director", release_date = null)
+        fun createFilmDTO() = FilmDTO(title = "film", director = "director", releaseDate = null)
 
         fun createDTOInput() = PlanetDTOInput(
             terrain = DTO_INPUT_terrain,

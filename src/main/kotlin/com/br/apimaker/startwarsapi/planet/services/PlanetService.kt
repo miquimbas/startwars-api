@@ -8,9 +8,7 @@ import com.br.apimaker.startwarsapi.log.LogManager
 import com.br.apimaker.startwarsapi.planet.database.PlanetModel
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetResponse
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTOInput
-import com.br.apimaker.startwarsapi.planet.restprovider.PlanetDTOOutput
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetProvider
-import com.br.apimaker.startwarsapi.planet.restprovider.PlanetResponseBuilder
 import com.br.apimaker.startwarsapi.planet.restprovider.PlanetResponseBuilder.Companion.newInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -82,7 +80,7 @@ class PlanetService @Autowired constructor(
         return films?.map {
             val dto = doRequestFilm(it)
 
-            FilmModel(dto?.title, dto?.release_date, dto?.director)
+            FilmModel(dto?.title, dto?.releaseDate, dto?.director)
         }
     }
 
