@@ -11,15 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-//criar testes
+//arrumar nome da variavel release_date
 // criar doc de testes
 // ensinar como ver cobertura de testes
 // descrever na documentação o pq das minhas decisões
-// ajustar retorno de status de erro
-//tratar ids invalidos
 // add nas docs como rodar o projeto
 // detalhar url para requisição e config do /api
-//arrumar nome da variavel release_date
+
 @RestController
 @RequestMapping("/planet")
 class PlanetAPI @Autowired constructor(
@@ -27,13 +25,13 @@ class PlanetAPI @Autowired constructor(
     private val responseBuilder: ResponseBuilder
 ) {
     @GetMapping("/")
-    fun findAll(): List<PlanetDTOOutput>? = planetService.list()
+    fun findAll(): ResponseEntity<List<PlanetDTOOutput>>? = responseBuilder.build(planetService.list())
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: String) = planetService.findById(id)
+    fun findById(@PathVariable id: String) = responseBuilder.build(planetService.findById(id))
 
     @GetMapping("/name/{name}")
-    fun findByName(@PathVariable name: String) = planetService.findByName(name)
+    fun findByName(@PathVariable name: String) = responseBuilder.build(planetService.findByName(name))
 
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: String): ResponseEntity<String> {
@@ -42,7 +40,7 @@ class PlanetAPI @Autowired constructor(
     }
 
     @PostMapping("/{id}/load")
-    fun load(@PathVariable id: Int): ResponseEntity<PlanetDTOOutput> {
+    fun load(@PathVariable id: Int): ResponseEntity<List<PlanetDTOOutput>> {
         val response = planetService.load(id)
         return responseBuilder.build(response)
     }

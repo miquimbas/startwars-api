@@ -25,10 +25,10 @@ class PlanetMapperTest {
     fun `should match variables of output dto when model is parsed`() {
         val planetModel = PlanetModel("1", "name", "climate", "terrain", filmModelGenerator(Date()))
         val planetDTO = planetMapper.convertToOutputDTO(planetModel)
-        assertThat(planetModel.name).isEqualTo(planetDTO.name)
-        assertThat(planetModel.climate).isEqualTo(planetDTO.climate)
-        assertThat(planetModel.terrain).isEqualTo(planetDTO.terrain)
-        assertThat(planetModel.films?.get(0)?.title).isEqualTo(planetDTO.films?.get(0)?.title)
+        assertThat(planetModel.name).isEqualTo(planetDTO?.name)
+        assertThat(planetModel.climate).isEqualTo(planetDTO?.climate)
+        assertThat(planetModel.terrain).isEqualTo(planetDTO?.terrain)
+        assertThat(planetModel.films?.get(0)?.title).isEqualTo(planetDTO?.films?.get(0)?.title)
     }
 
     private fun filmModelGenerator(today: Date) = listOf(

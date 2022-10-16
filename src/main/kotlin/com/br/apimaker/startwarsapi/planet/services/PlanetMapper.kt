@@ -10,13 +10,15 @@ import org.springframework.stereotype.Service
 @Service
 class PlanetMapper {
 
-    fun convertToOutputDTO(planetModel: PlanetModel?) = PlanetDTOOutput(
-        planetModel?.id,
-        planetModel?.name,
-        planetModel?.climate,
-        planetModel?.terrain,
-        convertToFilmDTO(planetModel?.films)
-    )
+    fun convertToOutputDTO(planetModel: PlanetModel?): PlanetDTOOutput? {
+        if (planetModel == null) return null
+        return PlanetDTOOutput(
+            planetModel.id,
+            planetModel.name,
+            planetModel.climate,
+            planetModel.terrain,
+            convertToFilmDTO(planetModel.films))
+    }
 
     fun convertToModel(planetDTOInput: PlanetDTOInput, films: List<FilmModel>?) = PlanetModel(
         name = planetDTOInput.name,

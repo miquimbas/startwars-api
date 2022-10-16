@@ -22,12 +22,13 @@ class PlanetTestProvider {
             name = DTO_INPUT_NAME
         )
 
-        fun createPlanetDTOOutput() = PlanetDTOOutput(
-            terrain = DTO_INPUT_terrain,
-            climate = DTO_INPUT_climate,
-            films = listOf(createFilmDTO()),
-            name = DTO_INPUT_NAME
-        )
+        fun createPlanetDTOOutput() =
+            listOf(PlanetDTOOutput(
+                terrain = DTO_INPUT_terrain,
+                climate = DTO_INPUT_climate,
+                films = listOf(createFilmDTO()),
+                name = DTO_INPUT_NAME
+        ))
     }
 
 
