@@ -11,13 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-// ajustar retorno do delete
-// criar doc de testes
-// ensinar como ver cobertura de testes
-// descrever na documentação o pq das minhas decisões
-// add nas docs como rodar o projeto
-// detalhar url para requisição e config do /api
-
 @RestController
 @RequestMapping("/planet")
 class PlanetAPI @Autowired constructor(
@@ -36,6 +29,6 @@ class PlanetAPI @Autowired constructor(
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: String) = responseBuilder.build(planetService.deleteById(id))
 
-        @PostMapping("/{id}/load")
+    @PostMapping("/{id}/load")
     fun load(@PathVariable id: Int) = responseBuilder.build(planetService.loadFromIntegrationById(id))
 }
