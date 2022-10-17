@@ -38,7 +38,7 @@ Depois, caso o erro ainda persista, será necessário dizer para a IDE usar a jd
 Feito esse processo, será necessário clicar no play novamente e selecionar Run StartwarsApiApplication.
 
 ## Rotas
-O projeto estará disponível na porta 8080, não contêm autenticação e poderá ser acessado conforme especificações abaixo:
+O projeto estará disponível na porta 8080, não contêm autenticação e poderá ser acessado via http://localhost:8080/api/swagger-ui/. 
 
 | Método  | URL | Descrição |
 | ------------- | ------------- | ------------- |
