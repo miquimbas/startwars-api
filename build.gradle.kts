@@ -26,6 +26,9 @@ dependencies {
 	implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 	implementation ("com.google.code.gson:gson:2.9.0")
 
+	implementation("io.springfox:springfox-boot-starter:3.0.0")
+	implementation("io.springfox:springfox-swagger-ui:3.0.0")
+
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
